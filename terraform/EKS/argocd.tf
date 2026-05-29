@@ -18,7 +18,7 @@ resource "helm_release" "argocd" {
         ingress = {
           enabled          = true
           ingressClassName = "nginx"
-          hostname         = "argocd.${var.name}.${var.zone_name}"
+          hostname         = "argocd.artemmanko.duckdns.org"
           path             = "/"
           pathType         = "Prefix"
         }

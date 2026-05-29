@@ -1,21 +1,24 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: python-backend
+  name: python-backend-ingress
   namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: python-backend
-  template:
-    metadata:
-      labels:
-        app: python-backend
-    spec:
-      containers:
-        - name: python-backend
-          image: chornob/python-backend-final:latest
-          ports:
-            - containerPort: 8080
-            
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - artemmanko.duckdns.org
+      secretName: python-backend-tls
+  rules:
+    - host: artemmanko.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: python-backend-service
+                port:
+                  number: 80
