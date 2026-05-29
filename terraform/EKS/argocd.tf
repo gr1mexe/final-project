@@ -6,25 +6,31 @@ resource "helm_release" "argocd" {
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
 
-  values = [
-    yamlencode({
-      configs = {
-        params = {
-          "server.insecure" = true
-        }
+values = [
+  yamlencode({
+    configs = {
+      params = {
+        "server.insecure" = true
       }
+    }
 
-      server = {
-        ingress = {
-          enabled          = true
-          ingressClassName = "nginx"
-          hostname         = "argocd.artemmanko.duckdns.org"
-          path             = "/"
-          pathType         = "Prefix"
+    server = {
+      ingress = {
+        enabled          = true
+        ingressClassName = "nginx"
+        hostname         = "argocd.artemmanko.duckdns.org"
+        path             = "/"
+        pathType         = "Prefix"
+
+        annotations = {
+          "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
         }
+
+        tls = true
       }
-    })
-  ]
+    }
+  })
+]
 
   depends_on = [
     helm_release.nginx_ingress
