@@ -18,3 +18,4 @@ spec:
           image: chornob/python-backend-final:latest
           ports:
             - containerPort: 8080
+            
