@@ -3,8 +3,14 @@ kind: Ingress
 metadata:
   name: python-backend-ingress
   namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - artemmanko.duckdns.org
+      secretName: python-backend-tls
   rules:
     - host: artemmanko.duckdns.org
       http:
